@@ -1,6 +1,8 @@
 /* =========================================================
    A to Z Automotive Limited — Interactions
    ========================================================= */
+import "./styles.css";
+
 (function () {
   "use strict";
 

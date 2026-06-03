@@ -135,7 +135,7 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.1; letter-spacing
 .hero__gear {
   position: absolute; right: -160px; top: 50%; transform: translateY(-50%);
   width: 620px; height: 620px; pointer-events: none; opacity: .5;
-  background: url("../img/logo-emblem.png") no-repeat center / contain;
+  background: url("/img/logo-emblem.png") no-repeat center / contain;
   filter: drop-shadow(0 20px 60px rgba(0, 0, 0, .6));
   animation: float 9s ease-in-out infinite;
 }
@@ -261,7 +261,7 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.1; letter-spacing
 
 /* ---------- CTA band ---------- */
 .cta-band { background: linear-gradient(120deg, var(--red) 0%, var(--red-700) 100%); color: #fff; position: relative; overflow: hidden; }
-.cta-band::after { content: ""; position: absolute; inset: 0; background: url("../img/logo-emblem.png") no-repeat right -80px center / 380px; opacity: .12; }
+.cta-band::after { content: ""; position: absolute; inset: 0; background: url("/img/logo-emblem.png") no-repeat right -80px center / 380px; opacity: .12; }
 .cta-band__inner { position: relative; z-index: 2; display: flex; align-items: center; justify-content: space-between; gap: 28px; padding: 54px 22px; flex-wrap: wrap; }
 .cta-band h2 { font-size: clamp(1.5rem, 3vw, 2.1rem); font-weight: 800; }
 .cta-band p { color: rgba(255, 255, 255, .92); margin-top: 6px; }

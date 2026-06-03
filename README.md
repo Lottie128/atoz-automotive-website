@@ -11,8 +11,9 @@ repairs — for light & heavy-duty fleets across Zambia.
 
 ## ✨ Highlights
 
-- **Single-page, fully responsive** marketing site (mobile → desktop).
-- **Zero build step** — pure HTML, CSS and vanilla JS. Open `index.html` and it runs.
+- **Vite-powered, single-page, fully responsive** marketing site (mobile → desktop).
+- **Ultra-light** — vanilla Vite, *no framework runtime*. Production bundle is **~5.6 KB gzipped** (CSS + JS combined).
+- **Optimised build** — minified + content-hashed CSS/JS, long-term immutable CDN caching, small assets inlined.
 - **Brand-accurate** — colours, logo and tagline taken from the official brand guide.
 - **Conversion-focused** — sticky WhatsApp quote flow, floating chat button, click-to-call.
 - **SEO-ready** — semantic HTML, meta/Open Graph tags, JSON-LD `AutoPartsStore` schema, `sitemap.xml` and `robots.txt`.
@@ -22,15 +23,19 @@ repairs — for light & heavy-duty fleets across Zambia.
 
 ```
 atoz/
-├── index.html              # The website
-├── assets/
-│   ├── css/styles.css      # All styling
-│   ├── js/script.js        # Nav, scroll reveal, WhatsApp quote form
-│   └── img/                # Logo lockup, emblem, favicon (from brand guide)
+├── index.html              # Vite entry / markup
+├── src/
+│   ├── main.js             # Imports CSS + nav, scroll-reveal, WhatsApp quote form
+│   └── styles.css          # All styling (bundled & hashed by Vite)
+├── public/                 # Copied verbatim to the site root
+│   ├── img/                # Logo lockup & emblem (1-week cache)
+│   ├── favicon.png
+│   ├── robots.txt
+│   └── sitemap.xml
 ├── brand-source/           # Original source material (PDFs, brochure, business card)
-├── robots.txt
-├── sitemap.xml
-└── README.md
+├── vite.config.js          # Build config
+├── vercel.json             # Vercel preset + cache/security headers
+└── package.json
 ```
 
 ## 🎨 Brand
@@ -46,27 +51,35 @@ atoz/
 
 ## 🚀 Run locally
 
-No tooling required — just open the file, or serve it for clean routing:
-
 ```bash
-# Option 1 — open directly
-open index.html
-
-# Option 2 — simple local server
-python3 -m http.server 8080
-# then visit http://localhost:8080
+npm install      # one-time
+npm run dev      # dev server with hot reload → http://localhost:5173
+npm run build    # production build → dist/
+npm run preview  # serve the built dist/ locally to verify
 ```
 
-## 🌐 Deploy
+## 🌐 Deploy to Vercel
 
-Because it's static, it deploys anywhere:
+The repo includes `vercel.json`, so Vercel needs no manual config.
 
-- **GitHub Pages** — push to `main`, then *Settings → Pages → Deploy from branch → / (root)*.
-- **Netlify / Vercel / Cloudflare Pages** — drag-and-drop the folder, no build command.
-- **Any web host** — upload the contents over FTP.
+**Option A — Dashboard (recommended):**
+1. Go to [vercel.com/new](https://vercel.com/new) and import this GitHub repo.
+2. Vercel auto-detects the **Vite** preset:
+   - Build command: `npm run build`
+   - Output directory: `dist`
+3. Click **Deploy**. Every push to `main` redeploys automatically.
 
-> Point the `azautomotiveltd.com` domain at your host and add a `CNAME` file
-> (containing `www.azautomotiveltd.com`) if using GitHub Pages.
+**Option B — CLI:**
+```bash
+npm i -g vercel
+vercel          # preview deployment
+vercel --prod   # production deployment
+```
+
+### Custom domain
+In the Vercel project: **Settings → Domains → Add `www.azautomotiveltd.com`**,
+then add the DNS records Vercel shows you at your domain registrar. Update the
+absolute `og:image` / canonical URLs in `index.html` if the final domain differs.
 
 ## 📞 Company details
 
