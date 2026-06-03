@@ -11,29 +11,36 @@ repairs — for light & heavy-duty fleets across Zambia.
 
 ## ✨ Highlights
 
-- **Vite-powered, single-page, fully responsive** marketing site (mobile → desktop).
-- **Ultra-light** — vanilla Vite, *no framework runtime*. Production bundle is **~5.6 KB gzipped** (CSS + JS combined).
-- **Optimised build** — minified + content-hashed CSS/JS, long-term immutable CDN caching, small assets inlined.
-- **Brand-accurate** — colours, logo and tagline taken from the official brand guide.
-- **Conversion-focused** — sticky WhatsApp quote flow, floating chat button, click-to-call.
-- **SEO-ready** — semantic HTML, meta/Open Graph tags, JSON-LD `AutoPartsStore` schema, `sitemap.xml` and `robots.txt`.
+- **Multi-page, Vite-powered, fully responsive** site — Home · About · Services · Parts · Contact.
+- **Ultra-light** — vanilla Vite, *no framework runtime*. Shared bundle is **~7.3 KB gzipped** (CSS + JS) and reused across every page.
+- **Clean URLs** — `/about`, `/services`… in dev, preview and production (no `.html`, no redirects).
+- **DRY** — shared header/footer/head injected at build time via a tiny zero-dependency HTML-partials plugin.
+- **World-class UX** — animated hero + stat counters, scroll-reveal, scroll-progress bar, page-hero banners with breadcrumbs, sticky nav with active state, back-to-top, micro-interactions.
+- **Optimised build** — minified + content-hashed CSS/JS, immutable CDN caching, small assets inlined.
+- **SEO-ready** — per-page titles/meta/canonical/Open Graph, JSON-LD `AutoPartsStore` schema, `sitemap.xml`, `robots.txt`.
 - **Accessible** — keyboard-friendly nav, ARIA labels, reduced-motion support.
 
 ## 🗂️ Structure
 
 ```
 atoz/
-├── index.html              # Vite entry / markup
+├── index.html              # Home          ┐
+├── about.html              # About         │ page entry points
+├── services.html           # Services      │ (Vite multi-page)
+├── parts.html              # Parts         │
+├── contact.html            # Contact       ┘
+├── partials/               # Shared markup injected at build time
+│   ├── head-assets.html    #   fonts, favicon, <script> module
+│   ├── header.html         #   top bar + sticky nav + scroll progress
+│   └── footer.html         #   CTA band, footer, floating WhatsApp, back-to-top
 ├── src/
-│   ├── main.js             # Imports CSS + nav, scroll-reveal, WhatsApp quote form
+│   ├── main.js             # Imports CSS + all interactions
 │   └── styles.css          # All styling (bundled & hashed by Vite)
 ├── public/                 # Copied verbatim to the site root
 │   ├── img/                # Logo lockup & emblem (1-week cache)
-│   ├── favicon.png
-│   ├── robots.txt
-│   └── sitemap.xml
+│   ├── favicon.png · robots.txt · sitemap.xml
 ├── brand-source/           # Original source material (PDFs, brochure, business card)
-├── vite.config.js          # Build config
+├── vite.config.js          # Multi-page build + partials + clean-URL plugins
 ├── vercel.json             # Vercel preset + cache/security headers
 └── package.json
 ```
@@ -49,31 +56,32 @@ atoz/
 | Heading font | Montserrat (Gilroy ExtraBold in print) |
 | Body font    | Inter     |
 
-## 🚀 Run locally
+## 🚀 Run locally (Bun)
 
 ```bash
-npm install      # one-time
-npm run dev      # dev server with hot reload → http://localhost:5173
-npm run build    # production build → dist/
-npm run preview  # serve the built dist/ locally to verify
+bun install      # one-time
+bun run dev      # dev server with hot reload → http://localhost:5173
+bun run build    # production build → dist/
+bun run preview  # serve the built dist/ locally to verify
 ```
 
 ## 🌐 Deploy to Vercel
 
-The repo includes `vercel.json`, so Vercel needs no manual config.
+The repo includes `vercel.json` (Bun install + Vite build), so Vercel needs no manual config.
 
 **Option A — Dashboard (recommended):**
 1. Go to [vercel.com/new](https://vercel.com/new) and import this GitHub repo.
-2. Vercel auto-detects the **Vite** preset:
-   - Build command: `npm run build`
+2. Vercel detects the **Vite** preset and the `bun.lock` lockfile:
+   - Install command: `bun install`
+   - Build command: `bun run build`
    - Output directory: `dist`
 3. Click **Deploy**. Every push to `main` redeploys automatically.
 
 **Option B — CLI:**
 ```bash
-npm i -g vercel
-vercel          # preview deployment
-vercel --prod   # production deployment
+bun add -g vercel   # or: npm i -g vercel
+vercel              # preview deployment
+vercel --prod       # production deployment
 ```
 
 ### Custom domain
