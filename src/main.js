@@ -137,28 +137,85 @@ import "./styles.css";
   if (year) year.textContent = new Date().getFullYear();
 })();
 
-  /* ---- Real-time Part Search ---- */
+  
+  /* ---- Robust Real-time Part Search ---- */
+  const partsDB = [{"name": "LandcruiserJ79 Brake shoes (new)", "price": 2250.0}, {"name": "LandcruiserJ79 Brake shoes (old)", "price": 1500.0}, {"name": "Landcruiser J79 Brake pads", "price": 1050.0}, {"name": "Engine Brake fluid Dot 4 500mls", "price": 228.0}, {"name": "Corolla AE 110 Brake pads", "price": 525.0}, {"name": "Corolla AE 110 Tie rod ends", "price": 262.5}, {"name": "Corolla AE 110  Ball Joints", "price": 337.5}, {"name": "Corolla AE 110 Brake Shoes", "price": 600.0}, {"name": "Auris 1NZ front break pads", "price": 825.0}, {"name": "Auris 1NZ rear brake pads", "price": 750.0}, {"name": "Allion 1NZ Front brake pads", "price": 675.0}, {"name": "Allion 1NZ brake Shoes", "price": 900.0}, {"name": "Landcruiser J79 Brake pads", "price": 1050.0}, {"name": "Landcruiser J79 Brake shoes", "price": 1500.0}, {"name": "Landcruiser 2015 brake shoes", "price": 2250.0}, {"name": "Landcruiser 2015 brake pads", "price": 1050.0}, {"name": "Corolla C V Joints", "price": 900.0}, {"name": "Corolla 1NR Clutch Plate", "price": 1500.0}, {"name": "Corolla 1NR Thrust bearing", "price": 1200.0}, {"name": "Corolla 1NR Pressure Plate", "price": 2700.0}, {"name": "Corolla 1NZ Ball Joints", "price": 450.0}, {"name": "Landcriuser 79 front Disc", "price": 2350.0}, {"name": "Landcruiser Air filter", "price": 4000.0}, {"name": "Landcruiser Fuel filter", "price": 350.0}, {"name": "Landcruiser Oil filter", "price": 250.0}, {"name": "Landcruiser brake pads", "price": 1500.0}, {"name": "Landcruiser brake shoes", "price": 2250.0}, {"name": "Hilux 1kD clutch kits", "price": 5500.0}, {"name": "Ball joints Auris", "price": 385.0}, {"name": "Tie rod ends Auris", "price": 420.0}, {"name": "Rack ends Auris", "price": 420.0}, {"name": "front  shocks Auris", "price": 1610.0}, {"name": "Rear shocks Auris", "price": 1050.0}, {"name": "Brake pads Auris", "price": 600.0}, {"name": "Stabilizer link Auris", "price": 420.0}, {"name": "Wheel bearing VVTI", "price": 2025.0}, {"name": "Wheel Drums VVTI", "price": 1275.0}, {"name": "Spinder bearing  VVTI", "price": 450.0}, {"name": "Ball joints Spacio", "price": 300.0}, {"name": "Tie rod ends Spacio", "price": 300.0}, {"name": "Rack ends  Spacio", "price": 300.0}, {"name": "Front  shocks Spacio", "price": 1120.0}, {"name": "Rear shocks Spacio", "price": 945.0}, {"name": "Radiator cap Spacio", "price": 250.0}, {"name": "Brake pads Spacio", "price": 250.0}, {"name": "Brake shoes Spacio", "price": 250.0}, {"name": "Landcruiser Slave master Cylinder", "price": 950.0}, {"name": "Landcruisser Suival bearing", "price": 550.0}, {"name": "Landcruiser Steering dumper", "price": 2800.0}, {"name": "Landcruiser Outer bearing", "price": 850.0}, {"name": "Landcruiser Brake discs", "price": 3000.0}, {"name": "Landcruiser Clutch master Cylinder", "price": 1200.0}, {"name": "Landcruiser Brake pads", "price": 375.0}, {"name": "Hiace oil filter", "price": 250.0}, {"name": "Hiace fuel filter", "price": 350.0}, {"name": "Spindle landcruiser76 series", "price": 3000.0}, {"name": "Hilux GD6 Brake pads", "price": 1500.0}, {"name": "Landcruiser 79series air filter", "price": 500.0}, {"name": "Landcruiser 79 series Fuel Filter", "price": 350.0}, {"name": "Landcruiser 79 series Oil filter", "price": 250.0}, {"name": "Mitsubishi Triton front shocks", "price": 3300.0}, {"name": "Mistubishi Triton Rear Shocks", "price": 1350.0}, {"name": "Mistubishi Triton Tie rod ends", "price": 750.0}, {"name": "Mistubishi Upper arm bushes", "price": 450.0}, {"name": "Mistubishi lower Arm bushes", "price": 600.0}, {"name": "Mistubishi front brake pads", "price": 975.0}, {"name": "Mistubishi Rear brake pads", "price": 675.0}, {"name": "Hiace  Aircon filter", "price": 450.0}, {"name": "Hiace Air filter", "price": 500.0}]
+;
   const searchInput = $("#partSearchInput");
-  if (searchInput) {
-    searchInput.addEventListener("input", (e) => {
-      const q = e.target.value.toLowerCase().trim();
-      const cards = $$(".part-card");
+  const searchForm = $("#partSearchForm");
+  const searchResults = $("#searchResults");
+  
+  if (searchInput && searchForm && searchResults) {
+    const renderResults = (query) => {
+      const q = query.toLowerCase().trim();
+      if (!q) {
+        searchResults.style.display = "none";
+        // Reset generic cards
+        $$(".part-card").forEach(card => {
+          card.style.display = "";
+          $$("li", card).forEach(li => li.style.display = "");
+        });
+        return;
+      }
       
-      cards.forEach(card => {
+      searchResults.style.display = "block";
+      
+      // 1. Filter generic cards (same as before)
+      $$(".part-card").forEach(card => {
         let cardHasVisibleItem = false;
         const titleText = (card.querySelector("h2")?.textContent || "").toLowerCase();
-        const items = $$("li", card);
-        
-        items.forEach(li => {
+        $$("li", card).forEach(li => {
           const itemText = li.textContent.toLowerCase();
-          // Match if query is in item text OR card title text
           const matches = itemText.includes(q) || titleText.includes(q);
           li.style.display = matches ? "" : "none";
           if (matches) cardHasVisibleItem = true;
         });
-        
-        // Hide card entirely if no items match
         card.style.display = cardHasVisibleItem ? "" : "none";
       });
+      
+      // 2. Search specific parts from DB
+      const dbMatches = partsDB.filter(p => p.name.toLowerCase().includes(q));
+      
+      let html = '<h4 style="margin-bottom: 12px; font-size: 1.05rem; color: var(--ink);">Specific Parts Found</h4>';
+      if (dbMatches.length > 0) {
+        html += '<ul class="part-list" style="padding: 0!important;">';
+        dbMatches.forEach(p => {
+          const waMsg = `Hi A to Z Automotive, I'm inquiring about: ${p.name}`;
+          const waUrl = `https://wa.me/260966310037?text=${encodeURIComponent(waMsg)}`;
+          html += `
+            <li>
+              <div class="part-item">
+                <span class="part-name">${p.name}</span>
+                <div class="part-action">
+                  <span class="part-price">K${p.price.toFixed(2)}</span>
+                  <a href="${waUrl}" target="_blank" rel="noopener" class="part-btn part-btn--text">Inquire</a>
+                </div>
+              </div>
+            </li>
+          `;
+        });
+        html += '</ul>';
+      } else {
+        const waMsg = `Hi A to Z Automotive, do you have: ${query}?`;
+        const waUrl = `https://wa.me/260966310037?text=${encodeURIComponent(waMsg)}`;
+        html += `
+          <div style="padding: 16px; background: #fff8f8; border: 1px dashed var(--red); border-radius: 8px; text-align: center;">
+            <p style="color: var(--ink); margin-bottom: 8px;">We couldn't find an exact match for "<b>${query}</b>" in our quick list.</p>
+            <p style="color: var(--muted); font-size: .9rem; margin-bottom: 14px;">We have thousands of parts in stock. Check with our team instantly!</p>
+            <a href="${waUrl}" target="_blank" rel="noopener" class="btn btn--primary btn--sm">Check Availability on WhatsApp</a>
+          </div>
+        `;
+      }
+      
+      searchResults.innerHTML = html;
+    };
+
+    searchInput.addEventListener("input", (e) => renderResults(e.target.value));
+    
+    searchForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      renderResults(searchInput.value);
+      // Optional: scroll to results if on mobile
+      searchResults.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     });
   }

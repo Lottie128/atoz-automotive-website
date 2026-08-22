@@ -26,11 +26,15 @@
 <div class="container">
 
 <div class="part-search reveal" style="margin-bottom: 30px;">
-<div class="search-box">
+<form action="javascript:void(0);" class="search-box" id="partSearchForm">
 <svg class="search-icon" viewbox="0 0 24 24"><path d="M10 18a7.95 7.95 0 0 0 4.34-1.26l5.25 5.25a1 1 0 0 0 1.42-1.42l-5.25-5.25A8 8 0 1 0 10 18zm0-14a6 6 0 1 1 0 12 6 6 0 0 1 0-12z"></path></svg>
-<input autocomplete="off" class="search-input" id="partSearchInput" placeholder="Search parts, brands, or categories..." type="search"/>
+<input autocomplete="off" class="search-input" id="partSearchInput" placeholder="Search exact parts (e.g. Corolla Brake Pads)..." type="search"/>
+<button style="display:none;" type="submit">Search</button>
+</form>
+<div id="searchResults" style="display: none; margin-top: 16px; background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); max-height: 400px; overflow-y: auto;">
 </div>
 </div>
+
 <div class="parts__grid">
 <article class="part-card reveal">
 <div class="part-card__img"><img alt="Filters and bearings" height="440" loading="lazy" src="/img/photos/part-high.jpg" width="760"/></div>
