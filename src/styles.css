@@ -514,3 +514,47 @@ body { animation: pageIn .55s var(--ease) both; }
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto; }
   .reveal { opacity: 1; transform: none; }
 }
+
+/* ---------- Pricing Table ---------- */
+.pricing-wrap {
+  margin-top: 36px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.pricing-table {
+  width: 100%;
+  min-width: 600px;
+  border-collapse: collapse;
+  text-align: left;
+}
+.pricing-table th {
+  background: var(--ink);
+  color: #fff;
+  padding: 16px 24px;
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: .95rem;
+  letter-spacing: .02em;
+  white-space: nowrap;
+}
+.pricing-table th:first-child { border-top-left-radius: var(--radius); }
+.pricing-table th:last-child { border-top-right-radius: var(--radius); }
+.pricing-table td {
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--line);
+  font-size: .96rem;
+  color: var(--text);
+  transition: background .2s;
+}
+.pricing-table tr:last-child td { border-bottom: none; }
+.pricing-table tbody tr:nth-child(even) { background: #fcfcfc; }
+.pricing-table tbody tr:hover td { background: #f5f5f5; }
+.pricing-table td.price {
+  font-weight: 700;
+  color: var(--red);
+  font-family: var(--font-head);
+}
