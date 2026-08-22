@@ -136,3 +136,29 @@ import "./styles.css";
   const year = $("#year");
   if (year) year.textContent = new Date().getFullYear();
 })();
+
+  /* ---- Real-time Part Search ---- */
+  const searchInput = $("#partSearchInput");
+  if (searchInput) {
+    searchInput.addEventListener("input", (e) => {
+      const q = e.target.value.toLowerCase().trim();
+      const cards = $$(".part-card");
+      
+      cards.forEach(card => {
+        let cardHasVisibleItem = false;
+        const titleText = (card.querySelector("h2")?.textContent || "").toLowerCase();
+        const items = $$("li", card);
+        
+        items.forEach(li => {
+          const itemText = li.textContent.toLowerCase();
+          // Match if query is in item text OR card title text
+          const matches = itemText.includes(q) || titleText.includes(q);
+          li.style.display = matches ? "" : "none";
+          if (matches) cardHasVisibleItem = true;
+        });
+        
+        // Hide card entirely if no items match
+        card.style.display = cardHasVisibleItem ? "" : "none";
+      });
+    });
+  }
